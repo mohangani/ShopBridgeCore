@@ -13,6 +13,8 @@ namespace ShopBridge.Tests
         [ClassInitialize]
         public void SetUp()
         {
+
+            //need to mock setup
         }
 
 
