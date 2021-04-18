@@ -36,10 +36,9 @@ namespace ShopBridge.Tests
         {
             var productId = 1;
 
-            var result = await _productController.DeleteItem(productId);
-            var okresult = result as ObjectResult;
+            var result = await _productController.DeleteItem(productId) as ObjectResult;
 
-            Assert.AreEqual(200, okresult.StatusCode);
+            Assert.AreEqual(200, result.StatusCode);
         }
 
         [TestMethod]
@@ -47,12 +46,11 @@ namespace ShopBridge.Tests
         {
             var productId = 100;
 
-            var result = await _productController.DeleteItem(productId);
-            var okresult = result as ObjectResult;
+            var result = await _productController.DeleteItem(productId) as ObjectResult;
 
-            Assert.AreEqual(400, okresult.StatusCode);
+            Assert.AreEqual(400, result.StatusCode);
 
-            Assert.AreEqual("Product Item Id Not Valid.", okresult.Value);
+            Assert.AreEqual("Product Item Id Not Valid.", result.Value);
         }
     }
 

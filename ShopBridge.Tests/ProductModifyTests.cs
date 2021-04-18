@@ -64,11 +64,10 @@ namespace ShopBridge.Tests
             };
 
             var result = await _productController.ModifyItem(product) as ObjectResult;
+            
             Assert.AreEqual(400, result.StatusCode);
 
-            var msg = ((IList)result.Value)[0].GetType().GetProperty("ErrorMessage").GetValue(((IList)result.Value)[0]);
-
-            Assert.AreEqual("Product Id is Not Exists", msg);
+            Assert.AreEqual("Product Id is Not Exists", result.GetErrorMessage());
         }
 
         [TestMethod]
@@ -86,9 +85,7 @@ namespace ShopBridge.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
 
-            var msg = ((IList)result.Value)[0].GetType().GetProperty("ErrorMessage").GetValue(((IList)result.Value)[0]);
-
-            Assert.AreEqual("'Id' must be greater than '0'.", msg);
+            Assert.AreEqual("'Id' must be greater than '0'.", result.GetErrorMessage());
         }
 
         [TestMethod]
@@ -107,9 +104,7 @@ namespace ShopBridge.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
 
-            var msg = ((IList)result.Value)[0].GetType().GetProperty("ErrorMessage").GetValue(((IList)result.Value)[0]);
-
-            Assert.AreEqual("'Name' must not be empty.", msg);
+            Assert.AreEqual("'Name' must not be empty.", result.GetErrorMessage());
         }
     }
 }

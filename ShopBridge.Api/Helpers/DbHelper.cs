@@ -19,7 +19,6 @@ namespace ShopBridge.Api.Helpers
         public string GetConnectionString()
         {
             return $"{_config.GetConnectionString("ServerConnection")} database={_config.GetValue<string>("DataBaseName")};";
-           // return _config.GetConnectionString("ServerConnection");
         }
 
         private string GetServerConnectionString()
@@ -59,7 +58,7 @@ namespace ShopBridge.Api.Helpers
                                     Name VARCHAR(100) NOT NULL,
                                     Description VARCHAR(1024),
                                     Price DECIMAL(10,2) NOT NULL,
-                                    Active bit NOT NULL
+                                    Active bit DEFAULT 1 NOT NULL
                                 )
                             END";
 

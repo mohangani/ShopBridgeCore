@@ -28,7 +28,7 @@ namespace ShopBridge.Api.Controllers
         }
 
         [HttpPost("AddItem")]
-        public async Task<IActionResult> AddItem(ProductInfoModel productInfo)
+        public async Task<ActionResult> AddItem(ProductInfoModel productInfo)
         {
             //validations
             var validation = await _productValidator.ValidateAsync(productInfo);
@@ -40,7 +40,7 @@ namespace ShopBridge.Api.Controllers
         }
 
         [HttpPost("ModifyItem")]
-        public async Task<IActionResult> ModifyItem(ProductInfoModel productInfo)
+        public async Task<ActionResult> ModifyItem(ProductInfoModel productInfo)
         {
             //validations
             var validation = await _productModifyValidator.ValidateAsync(productInfo);
@@ -52,7 +52,7 @@ namespace ShopBridge.Api.Controllers
         }
 
         [HttpDelete("DeleteItem")]
-        public async Task<IActionResult> DeleteItem(int id)
+        public async Task<ActionResult> DeleteItem(int id)
         {
             //validations
             if (id <= 0 || !await _productDataAcces.IsProductIdExists(id))
@@ -62,7 +62,7 @@ namespace ShopBridge.Api.Controllers
         }
 
         [HttpGet("ProductItemsList")]
-        public async Task<IActionResult> ProductItemsList()
+        public async Task<ActionResult> ProductItemsList()
         {
             return Ok(await _productDataAcces.ProductItemsList());
         }

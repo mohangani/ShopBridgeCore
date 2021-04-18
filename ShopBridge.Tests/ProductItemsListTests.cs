@@ -35,25 +35,18 @@ namespace ShopBridge.Tests
         [TestMethod]
         public async Task ProductItemsList_Return200_WhenCall()
         {
-            var result = await _productController.ProductItemsList();
-            var okresult = result as ObjectResult;
-
-            Assert.AreEqual(200, okresult.StatusCode);
+            var result = await _productController.ProductItemsList() as ObjectResult;
+            Assert.AreEqual(200, result.StatusCode);
         }
 
 
         [TestMethod]
         public async Task ProductItemsList_ReturnOneProductItem_WhenCall()
         {
-            var result = await _productController.ProductItemsList();
-            var okresult = result as ObjectResult;
+            var result = await _productController.ProductItemsList() as ObjectResult;
 
-            Assert.AreEqual(200, okresult.StatusCode);
-            Assert.AreEqual(1, ((IEnumerable)okresult.Value).Cast<object>().Count());
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.AreEqual(1, ((IEnumerable)result.Value).Cast<object>().Count());
         }
-
-
-
-
     }
 }

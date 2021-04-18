@@ -8,16 +8,17 @@ using ShopBridge.Api.Validators;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShopBridge.Tests
 {
     [TestClass]
-    public class ProductTests
+    public class ProductAddItemTests
     {
         private readonly ProductController _productController;
 
-        public ProductTests()
+        public ProductAddItemTests()
         {
 
             var productDataAccess = new Mock<IProductDataAccess>();
@@ -56,12 +57,9 @@ namespace ShopBridge.Tests
                 Price = 10.30M
             };
 
-            var result = await _productController.AddItem(product) as ObjectResult;
-            Assert.AreEqual(400, result.StatusCode);
+            var result = await _productController.AddItem(product);
 
-            var msg = ((IList)result.Value)[0].GetType().GetProperty("ErrorMessage").GetValue(((IList)result.Value)[0]);
-
-            Assert.AreEqual("Product Name Already Exists", msg);
+            Assert.AreEqual("Product Name Already Exists", result.GetErrorMessage());
         }
 
         [TestMethod]
@@ -79,9 +77,7 @@ namespace ShopBridge.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
 
-            var msg = ((IList)result.Value)[0].GetType().GetProperty("ErrorMessage").GetValue(((IList)result.Value)[0]);
-
-            Assert.AreEqual("'Price' must be greater than '0'.", msg);
+            Assert.AreEqual("'Price' must be greater than '0'.", result.GetErrorMessage());
         }
 
         [TestMethod]
@@ -99,9 +95,7 @@ namespace ShopBridge.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
 
-            var msg = ((IList)result.Value)[0].GetType().GetProperty("ErrorMessage").GetValue(((IList)result.Value)[0]);
-
-            Assert.AreEqual("'Name' must not be empty.", msg);
+            Assert.AreEqual("'Name' must not be empty.", result.GetErrorMessage());
         }
     }
 }
