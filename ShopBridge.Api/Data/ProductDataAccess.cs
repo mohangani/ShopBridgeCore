@@ -94,6 +94,7 @@ namespace ShopBridge.Api.Data
             using var command = new SqlCommand(sqlQuery, sqlCon);
 
             await sqlCon.OpenAsync();
+
             using var reader = await command.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())

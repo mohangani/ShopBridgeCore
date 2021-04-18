@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ShopBridge.Api.Controllers;
-using ShopBridge.Api.Core;
 using ShopBridge.Api.Data;
 using ShopBridge.Api.Helpers;
 using ShopBridge.Api.Validators;
@@ -15,7 +14,6 @@ namespace ShopBridge.Api.Extensions
     {
         public static void AddRequiredServices(this IServiceCollection services) {
             
-            services.AddScoped<IProduct, Product>();
             services.AddScoped<IProductDataAccess, ProductDataAccess>();
             services.AddSingleton<IDbHelper, DbHelper>();
 
