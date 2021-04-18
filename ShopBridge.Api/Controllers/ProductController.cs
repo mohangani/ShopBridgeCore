@@ -35,8 +35,8 @@ namespace ShopBridge.Api.Controllers
 
             if (validation.IsValid)
                 return Ok(await _productDataAcces.AddItem(productInfo));
-            else
-                return Ok(validation.Errors);
+
+            return BadRequest(validation.Errors);
         }
 
         [HttpPost("ModifyItem")]
@@ -47,16 +47,16 @@ namespace ShopBridge.Api.Controllers
 
             if (validation.IsValid)
                 return Ok(await _productDataAcces.ModifyItem(productInfo));
-            else
-                return Ok(validation.Errors);
+
+            return BadRequest(validation.Errors);
         }
 
         [HttpDelete("DeleteItem")]
         public async Task<IActionResult> DeleteItem(int id)
         {
             //validations
-            if (id <= 0 || ! await _productDataAcces.IsProductIdExists(id))
-                return Ok("Product Item Id Not Valid.");
+            if (id <= 0 || !await _productDataAcces.IsProductIdExists(id))
+                return BadRequest("Product Item Id Not Valid.");
 
             return Ok(await _productDataAcces.DeleteItem(id));
         }

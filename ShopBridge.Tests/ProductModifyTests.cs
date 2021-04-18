@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShopBridge.Api.Controllers;
@@ -8,21 +8,25 @@ using ShopBridge.Api.Validators;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ShopBridge.Tests
 {
+    
+
     [TestClass]
-    public class ProductTests
+    public class ProductModifyTests
     {
         private readonly ProductController _productController;
 
-        public ProductTests()
+        public ProductModifyTests()
         {
 
             var productDataAccess = new Mock<IProductDataAccess>();
             productDataAccess.Setup(a => a.ValidateName("testItem")).ReturnsAsync(true);
-            productDataAccess.Setup(a => a.IsProductIdExists(1)).ReturnsAsync(false);
+            productDataAccess.Setup(a => a.IsProductIdExists(1)).ReturnsAsync(true);
+            productDataAccess.Setup(a => a.IsProductIdExists(100)).ReturnsAsync(false);
 
             var productValidator = new ProductValidator(productDataAccess.Object);
             var productModifyValidator = new ProductModifyValidator(productDataAccess.Object);
@@ -31,41 +35,44 @@ namespace ShopBridge.Tests
 
 
         [TestMethod]
-        public async Task AddItem_Return200_WhenAllvaluesValid()
+        public async Task ModifyItem_Return200_WhenAllvaluesValid()
         {
             var product = new ProductInfoModel()
             {
+                Id = 1,
                 Name = "testItem",
                 Description = "Blue Pen",
                 Price = 10.30M
+               
             };
 
-            var result = await _productController.AddItem(product);
+            var result = await _productController.ModifyItem(product);
             var okresult = result as ObjectResult;
 
             Assert.AreEqual(200, okresult.StatusCode);
         }
 
         [TestMethod]
-        public async Task AddItem_Return400WithDuplicateProductMessage_WhenProductNameDuplicate()
+        public async Task ModifyItem_Return400WithIdValidationMessage_WhenProductIdWrong()
         {
             var product = new ProductInfoModel()
             {
-                Name = "duplicate",
+                Id=100,
+                Name = "testItem",
                 Description = "Blue Pen",
                 Price = 10.30M
             };
 
-            var result = await _productController.AddItem(product) as ObjectResult;
+            var result = await _productController.ModifyItem(product) as ObjectResult;
             Assert.AreEqual(400, result.StatusCode);
 
             var msg = ((IList)result.Value)[0].GetType().GetProperty("ErrorMessage").GetValue(((IList)result.Value)[0]);
 
-            Assert.AreEqual("Product Name Already Exists", msg);
+            Assert.AreEqual("Product Id is Not Exists", msg);
         }
 
         [TestMethod]
-        public async Task AddItem_Return400WithPriceValidationMessage_WhenPriceLessthanZero()
+        public async Task ModifyItem_Return400WithIdGraterthanZeroValidationMessage_WhenIdLessthanorEqalZero()
         {
             var product = new ProductInfoModel()
             {
@@ -74,27 +81,28 @@ namespace ShopBridge.Tests
                 Price = -3.00M
             };
 
-            var result = await _productController.AddItem(product) as ObjectResult;
+            var result = await _productController.ModifyItem(product) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
 
             var msg = ((IList)result.Value)[0].GetType().GetProperty("ErrorMessage").GetValue(((IList)result.Value)[0]);
 
-            Assert.AreEqual("'Price' must be greater than '0'.", msg);
+            Assert.AreEqual("'Id' must be greater than '0'.", msg);
         }
 
         [TestMethod]
-        public async Task AddItem_Return400WithNameValidationMessages_WhenNameNullEmpty()
+        public async Task ModifyItem_Return400WithNameValidationMessages_WhenNameNullEmpty()
         {
             var product = new ProductInfoModel()
             {
+                Id=1,
                 Name = null,
                 Description = "Blue Pen",
                 Price = 3.00M
             };
 
-            var result = await _productController.AddItem(product) as ObjectResult;
+            var result = await _productController.ModifyItem(product) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(400, result.StatusCode);
